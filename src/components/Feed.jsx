@@ -21,7 +21,13 @@ const Feed = () => {
       dispatch(addFeed(res?.data?.data));
     } catch (err) {}
   };
-  return <div>{feed && <UserCard user={feed[0]} />}</div>;
+  return (
+    feed && (
+      <div className="flex justify-center my-10">
+        <UserCard user={feed[0]} />
+      </div>
+    )
+  );
 };
 
 export default Feed;

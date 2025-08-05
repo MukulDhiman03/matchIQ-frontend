@@ -7,7 +7,6 @@ import { removeUser } from "../utils/userSlice";
 
 const NavBar = () => {
   const user = useSelector((state) => state.user);
-  console.log("user is ", user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,12 +18,9 @@ const NavBar = () => {
         {},
         { withCredentials: true }
       );
-      // console.log("Logout res ", res);
       dispatch(removeUser());
       navigate("/login");
-    } catch (err) {
-      console.log("ERROR: ", err);
-    }
+    } catch (err) {}
   };
   return (
     <div className="navbar bg-base-300 shadow-sm">

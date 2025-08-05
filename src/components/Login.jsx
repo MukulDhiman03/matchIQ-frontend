@@ -22,12 +22,10 @@ const Login = () => {
         },
         { withCredentials: true }
       );
-      // console.log(res.data);
       dispatch(addUser(res.data));
       navigate("/");
     } catch (err) {
       setError(err?.response?.data || "Something went wrong!");
-      console.log("Error is :", err);
     }
   };
 

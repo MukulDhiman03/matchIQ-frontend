@@ -6,9 +6,12 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
 
 const Login = () => {
-  const [emailId, setEmailId] = useState("vaibhavdhiman853@gmail.com");
-  const [password, setPassword] = useState("Password@1234");
+  const [emailId, setEmailId] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
+  const [isLoginForm, setIsLoginForm] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -29,11 +32,55 @@ const Login = () => {
     }
   };
 
+  const handleSignup = async () => {
+    console.log("Clicked");
+    try {
+      const res = await axios.post(
+        BASE_URL + "/signup",
+        { emailId, firstName, lastName, password },
+        { withCredentials: true }
+      );
+      console.log(res);
+      dispatch(addUser(res?.data?.data));
+      navigate("/profile");
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <div className="flex justify-center my-10 ">
       <div className="card bg-base-300 w-96 shadow-xl">
         <div className="card-body">
-          <h2 className="card-title justify-center">Login</h2>
+          <h2 className="card-title justify-center">
+            {isLoginForm ? "Login" : "Sign Up"}
+          </h2>
+          {!isLoginForm && (
+            <>
+              <div className="my-2">
+                <label className="input validator">
+                  <input
+                    type="text"
+                    placeholder="Enter first name"
+                    required
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                  />
+                </label>
+              </div>
+              <div className="my-2">
+                <label className="input validator">
+                  <input
+                    type="text"
+                    placeholder="Enter last name"
+                    required
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                  />
+                </label>
+              </div>
+            </>
+          )}
           <div className="my-2">
             <label className="input validator">
               <svg
@@ -108,10 +155,21 @@ const Login = () => {
           </div>
           {error && <p className="text-red-700">ERROR: {error}</p>}
           <div className="card-actions justify-center">
-            <button className="btn btn-primary" onClick={handleLogin}>
-              Login
+            <button
+              className="btn btn-primary"
+              onClick={isLoginForm ? handleLogin : handleSignup}
+            >
+              {isLoginForm ? "Login" : "Sign Up"}
             </button>
           </div>
+          <p
+            className="cursor-pointer text-center hover:underline"
+            onClick={() => setIsLoginForm((value) => !value)}
+          >
+            {isLoginForm
+              ? "New user? sign up here"
+              : "Existing user? login here"}
+          </p>
         </div>
       </div>
     </div>
